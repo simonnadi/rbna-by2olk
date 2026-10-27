@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="theme-color" content="#120d08">
+  <meta name="description" content="اسحب الورقة واقرأ رسالة تشجيعية">
+
+  <title>ربنا بيقولك</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --gold: #d7b45c;
+      --gold-light: #f3d98b;
+      --dark: #120d08;
+      --brown: #3d2b1f;
+      --paper: #fffaf0;
+      --paper-dark: #f1dfae;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      overflow: hidden;
+      display: grid;
+      place-items: center;
+      position: relative;
+      isolation: isolate;
+      color: #ffffff;
+      font-family: "Tajawal", sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 50% 38%,
+          rgba(75, 48, 25, 0.35) 0%,
+          transparent 34%
+        ),
+        radial-gradient(
+          circle at 15% 90%,
+          rgba(201, 168, 76, 0.08) 0%,
+          transparent 28%
+        ),
+        linear-gradient(
+          145deg,
+          #25170d 0%,
+          #120d08 48%,
+          #0b0805 100%
+        );
+    }
+
+    button,
+    .paper {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #stars {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+    }
+
+    .bg-glow {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      z-index: -1;
+      width: min(680px, 100vw);
+      aspect-ratio: 1;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+
+      background: radial-gradient(
+        circle,
+        rgba(201, 168, 76, 0.14) 0%,
+        rgba(201, 168, 76, 0.04) 38%,
+        transparent 70%
+      );
+
+      filter: blur(3px);
+    }
+
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 24px 16px 30px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      position: relative;
+      z-index: 1;
+    }
+
+    .title-wrap {
+      margin-bottom: 26px;
+      text-align: center;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .subtitle {
+      margin-bottom: 7px;
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 3px;
+      opacity: 0.82;
+    }
+
+    .title {
+      color: var(--gold-light);
+      font-family: "Amiri", serif;
+      font-size: clamp(32px, 8vw, 46px);
+      line-height: 1.2;
+      text-shadow: 0 0 30px rgba(201, 168, 76, 0.32);
+    }
+
+    .hint {
+      margin-top: 8px;
+      color: rgba(255, 255, 255, 0.48);
+      font-size: 13px;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    .scene {
+      width: min(280px, 88vw);
+      height: 380px;
+      position: relative;
+      animation: fadeUp 0.9s 0.18s ease both;
+    }
+
+    .paper {
+      position: absolute;
+      bottom: 90px;
+      left: 50%;
+      z-index: 8;
+
+      width: 200px;
+      min-height: 320px;
+      padding: 18px 15px 16px;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      touch-action: none;
+      cursor: grab;
+      user-select: none;
+
+      border: 1px solid rgba(146, 103, 35, 0.18);
+      border-radius: 6px 6px 3px 3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          rgba(133, 85, 23, 0.06),
+          transparent 12%,
+          transparent 88%,
+          rgba(133, 85, 23, 0.06)
+        ),
+        linear-gradient(
+          170deg,
+          var(--paper),
+          var(--paper-dark)
+        );
+
+      box-shadow:
+        0 -5px 25px rgba(0, 0, 0, 0.45),
+        2px 0 8px rgba(0, 0, 0, 0.12),
+        -2px 0 8px rgba(0, 0, 0, 0.12);
+
+      transform: translateX(-50%);
+      will-change: transform;
+    }
+
+    .paper:active {
+      cursor: grabbing;
+    }
+
+    .paper::before {
+      content: "";
+      position: absolute;
+      inset: 48px 14px 14px;
+      z-index: 0;
+      pointer-events: none;
+
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 24px,
+        rgba(201, 168, 76, 0.1) 24px,
+        rgba(201, 168, 76, 0.1) 25px
+      );
+    }
+
+    .paper::after {
+      content: "";
+      position: absolute;
+      top: 9px;
+      left: 9px;
+      right: 9px;
+      height: 1px;
+      background: rgba(140, 95, 31, 0.2);
+    }
+
+    .paper-icon {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 9px;
+      font-size: 22px;
+      filter: drop-shadow(0 1px 3px rgba(201, 168, 76, 0.35));
+    }
+
+    .paper-verse {
+      position: relative;
+      z-index: 1;
+
+      color: var(--brown);
+      font-family: "Amiri", serif;
+      font-size: 15px;
+      line-height: 1.95;
+      text-align: center;
+      white-space: pre-line;
+      word-break: normal;
+
+      opacity: 0;
+      transform: translateY(8px);
+
+      transition:
+        opacity 0.45s ease 0.2s,
+        transform 0.45s ease 0.2s;
+    }
+
+    .paper.revealed .paper-verse {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .box-body {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 10;
+
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      pointer-events: none;
+
+      border-radius: 6px 6px 14px 14px;
+
+      background: linear-gradient(
+        160deg,
+        #704f39,
+        #352116
+      );
+
+      box-shadow:
+        0 24px 60px rgba(0, 0, 0, 0.62),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .box-body::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background: repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 22px,
+        rgba(255, 255, 255, 0.025) 22px,
+        rgba(255, 255, 255, 0.025) 23px
+      );
+    }
+
+    .box-body::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+
+      height: 10px;
+      border-radius: 0 0 14px 14px;
+      background: #25140b;
+    }
+
+    .box-rim {
+      position: absolute;
+      bottom: 193px;
+      left: -8px;
+      z-index: 12;
+
+      width: calc(100% + 16px);
+      height: 22px;
+      pointer-events: none;
+
+      border-radius: 6px;
+
+      background: linear-gradient(
+        160deg,
+        #8d664a,
+        #593726
+      );
+
+      box-shadow:
+        0 6px 16px rgba(0, 0, 0, 0.42),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1);
+    }
+
+    .box-slot {
+      position: absolute;
+      bottom: 194px;
+      left: 50%;
+      z-index: 11;
+
+      width: 210px;
+      height: 16px;
+      pointer-events: none;
+
+      border-radius: 4px;
+      background: #170b06;
+      box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.75);
+
+      transform: translateX(-50%);
+    }
+
+    .arrow-hint {
+      position: absolute;
+      bottom: 230px;
+      left: 50%;
+      z-index: 15;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+
+      pointer-events: none;
+      transform: translateX(-50%);
+      animation: bounce 1.5s ease-in-out infinite;
+      transition: opacity 0.35s ease;
+    }
+
+    .arrow-hint span {
+      display: block;
+      width: 2px;
+      height: 9px;
+      border-radius: 2px;
+      background: var(--gold);
+      opacity: 0.75;
+    }
+
+    .arrow-hint::after {
+      content: "▲";
+      color: var(--gold);
+      font-size: 11px;
+      opacity: 0.75;
+    }
+
+    .arrow-hint.hidden {
+      opacity: 0;
+    }
+
+    .btn {
+      margin-top: 34px;
+      padding: 12px 30px;
+
+      border: 1px solid var(--gold);
+      border-radius: 50px;
+      outline: none;
+
+      color: var(--gold-light);
+      background: rgba(201, 168, 76, 0.03);
+
+      font: 500 16px "Tajawal", sans-serif;
+      cursor: pointer;
+
+      transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.2s ease,
+        box-shadow 0.25s ease;
+
+      animation: fadeUp 0.9s 0.35s ease both;
+    }
+
+    .btn:hover {
+      color: var(--dark);
+      background: var(--gold);
+      box-shadow: 0 8px 24px rgba(201, 168, 76, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .btn:focus-visible {
+      box-shadow: 0 0 0 3px rgba(243, 217, 139, 0.35);
+    }
+
+    .confetti {
+      position: fixed;
+      top: -15px;
+      z-index: 50;
+
+      width: 8px;
+      height: 8px;
+
+      pointer-events: none;
+      border-radius: 2px;
+
+      animation: fall 2.2s ease-out forwards;
+    }
+
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        opacity: 0.35;
+      }
+
+      50% {
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes bounce {
+      0%,
+      100% {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      50% {
+        transform: translateX(-50%) translateY(-7px);
+      }
+    }
+
+    @keyframes fall {
+      0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(100vh) rotate(540deg);
+      }
+    }
+
+    @media (max-height: 700px) {
+      .container {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        transform: scale(0.88);
+      }
+
+      .title-wrap {
+        margin-bottom: 12px;
+      }
+
+      .btn {
+        margin-top: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <main class="container">
+
+    <header class="title-wrap">
+      <div class="subtitle">✦ اسحب ورقة ✦</div>
+
+      <h1 class="title">ربنا بيقولك</h1>
+
+      <p class="hint">↑ اسحب الورقة لفوق</p>
+    </header>
+
+    <section class="scene" aria-label="صندوق الرسائل">
+
+      <div
+        class="arrow-hint"
+        id="arrowHint"
+        aria-hidden="true"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
+      <div
+        class="paper"
+        id="paper"
+        role="button"
+        tabindex="0"
+        aria-label="اسحب الورقة لعرض الرسالة"
+      >
+        <div class="paper-icon" aria-hidden="true">✦</div>
+
+        <div
+          class="paper-verse"
+          id="verseText"
+          aria-live="polite"
+        ></div>
+      </div>
+
+      <div class="box-slot" aria-hidden="true"></div>
+      <div class="box-rim" aria-hidden="true"></div>
+      <div class="box-body" aria-hidden="true"></div>
+    </section>
+
+    <button
+      class="btn"
+      id="newVerseBtn"
+      type="button"
+    >
+      ✦ ورقة جديدة
+    </button>
+
+  </main>
+
+  <script>
+    const verses = [
+      `يوحنا 3:16
+«هكَذَا أَحَبَّ اللهُ الْعَالَمَ
+حَتَّى بَذَلَ ابْنَهُ الْوَحِيدَ،
+لِكَيْ لاَ يَهْلِكَ كُلُّ مَنْ يُؤْمِنُ بِهِ،
+بَلْ تَكُونُ لَهُ الْحَيَاةُ الأَبَدِيَّةُ.»`,
+
+      `المزامير 23:1
+«الرَّبُّ رَاعِيَّ
+فَلاَ يُعْوِزُنِي شَيْءٌ.»`,
+
+      `فيلبي 4:13
+«أَسْتَطِيعُ كُلَّ شَيْءٍ
+فِي الْمَسِيحِ الَّذِي يُقَوِّينِي.»`,
+
+      `أمثال 3:5
+«تَوَكَّلْ عَلَى الرَّبِّ بِكُلِّ قَلْبِكَ،
+وَعَلَى فَهْمِكَ لاَ تَعْتَمِدْ.»`,
+
+      `إشعياء 41:10
+«لاَ تَخَفْ لأَنِّي مَعَكَ.
+لاَ تَتَلَفَّتْ لأَنِّي إِلهُكَ.»`,
+
+      `رومية 8:28
+«كُلَّ الأَشْيَاءِ تَعْمَلُ مَعًا
+لِلْخَيْرِ لِلَّذِينَ يُحِبُّونَ اللهَ.»`,
+
+      `المزامير 46:1
+«اَللهُ لَنَا مَلْجَأٌ وَقُوَّةٌ.
+عَوْنًا فِي الضِّيْقَاتِ.»`,
+
+      `متى 11:28
+«تَعَالَوْا إِلَيَّ يَا جَمِيعَ
+الْمُتْعَبِينَ وَالثَّقِيلِي الأَحْمَالِ،
+وَأَنَا أُرِيحُكُمْ.»`,
+
+      `يوحنا 14:27
+«سَلاَمًا أَتْرُكُ لَكُمْ.
+سَلاَمِي أُعْطِيكُمْ.»`,
+
+      `المزامير 121:7-8
+«الرَّبُّ يَحْفَظُكَ مِنْ كُلِّ شَرّ.
+يَحْفَظُ نَفْسَكَ.
+الرَّبُّ يَحْفَظُ خُرُوجَكَ وَدُخُولَكَ.»`,
+
+      `المزامير 27:1
+«اَلرَّبُّ نُورِي وَخَلاَصِي،
+مِمَّنْ أَخَافُ؟
+الرَّبُّ حِصْنُ حَيَاتِي.»`,
+
+      `مزمور 25:15
+«عَيْنَايَ دَائِمًا إِلَى الرَّبِّ،
+لأَنَّهُ هُوَ يُخْرِجُ رِجْلَيَّ
+مِنَ الشَّبَكَةِ.»`,
+
+      `المزامير 34:8
+«ذُوقُوا وَانْظُرُوا مَا أَطْيَبَ الرَّبَّ.
+طُوبَى لِلرَّجُلِ الْمُتَوَكِّلِ عَلَيْهِ.»`,
+
+      `إشعياء 55:6
+«اُطْلُبُوا الرَّبَّ مَا دَامَ يُوجَدُ.
+ادْعُوهُ وَهُوَ قَرِيبٌ.»`,
+
+      `المزامير 51:10
+«قَلْبًا نَقِيًّا اخْلُقْ فِيَّ يَا اَللهُ،
+وَرُوحًا مُسْتَقِيمًا جَدِّدْ فِي دَاخِلِي.»`,
+
+      `لو مقدرتش أرجعلك
+زي الابن الضال،
+افتقدني يا رب زي السامرية ♥️.`,
+
+      `تركت كل شيء في
+يدك يا رب،
+لأن يدك تسع كل شيء ✨`,
+
+      `المزامير 71:7
+«أَمَّا أَنْتَ فَمَلْجَإِي الْقَوِيُّ.»`,
+
+      `بطرس الأولى 5:7
+«مُلْقِينَ كُلَّ هَمِّكُمْ عَلَيْهِ،
+لأَنَّهُ هُوَ يَعْتَنِي بِكُمْ.»`,
+
+      `إشعياء 40:29
+«يَمْنَحُ الْمُتْعَبَ قُوَّةً،
+وَيَزِيدُ فَاقِدَ الْقُدْرَةِ احْتِمَالًا.»`,
+
+      `لقد تخلى الكل عني،
+أما أنت فلم تتركني لحظة 🫂♥️.`,
+
+      `دانيال 6:27
+«هُوَ يُنَجِّي وَيُنْقِذُ،
+وَيَعْمَلُ الآيَاتِ وَالْعَجَائِبَ.»`
+    ];
+
+    const paper = document.getElementById("paper");
+    const verseText = document.getElementById("verseText");
+    const arrowHint = document.getElementById("arrowHint");
+    const newVerseBtn = document.getElementById("newVerseBtn");
+
+    let dragging = false;
+    let revealed = false;
+    let startY = 0;
+
+    /*
+      قائمة الدورة الحالية.
+      كل آية تظهر مرة واحدة فقط في الدورة.
+    */
+    let verseQueue = [];
+
+    function shuffle(array) {
+      const result = [...array];
+
+      for (let i = result.length - 1; i > 0; i--) {
+        const randomIndex = Math.floor(Math.random() * (i + 1));
+
+        [result[i], result[randomIndex]] = [
+          result[randomIndex],
+          result[i]
+        ];
+      }
+
+      return result;
+    }
+
+    function createNewCycle() {
+      verseQueue = shuffle(verses);
+    }
+
+    function getNextVerse() {
+      /*
+        عند انتهاء كل الآيات:
+        نبدأ دورة جديدة من البداية.
+      */
+      if (verseQueue.length === 0) {
+        createNewCycle();
+      }
+
+      return verseQueue.pop();
+    }
+
+    function prepareNextVerse() {
+      /*
+        الآية موجودة داخل الورقة،
+        لكنها مخفية لأن الورقة لا تحتوي على revealed.
+      */
+      verseText.textContent = getNextVerse();
+    }
+
+    function getClientY(event) {
+      if (event.touches && event.touches.length) {
+        return event.touches[0].clientY;
+      }
+
+      return event.clientY;
+    }
+
+    function setPaperPosition(y) {
+      paper.style.transform =
+        `translate3d(-50%, ${y}px, 0)`;
+    }
+
+    function startDrag(event) {
+      if (revealed) return;
+
+      dragging = true;
+      startY = getClientY(event);
+
+      arrowHint.classList.add("hidden");
+      paper.style.transition = "none";
+
+      if (event.pointerId !== undefined) {
+        paper.setPointerCapture(event.pointerId);
+      }
+    }
+
+    function moveDrag(event) {
+      if (!dragging || revealed) return;
+
+      if (event.cancelable) {
+        event.preventDefault();
+      }
+
+      const distance = getClientY(event) - startY;
+      const pull = Math.max(-280, Math.min(0, distance));
+
+      setPaperPosition(pull);
+
+      if (pull <= -135) {
+        revealPaper();
+      }
+    }
+
+    function endDrag() {
+      if (!dragging) return;
+
+      dragging = false;
+
+      if (!revealed) {
+        paper.style.transition =
+          "transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)";
+
+        setPaperPosition(0);
+        arrowHint.classList.remove("hidden");
+      }
+    }
+
+    function revealPaper() {
+      if (revealed) return;
+
+      revealed = true;
+      dragging = false;
+
+      paper.style.transition =
+        "transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)";
+
+      setPaperPosition(-170);
+
+      /*
+        هنا تظهر الآية فقط.
+      */
+      paper.classList.add("revealed");
+      arrowHint.classList.add("hidden");
+
+      createConfetti();
+    }
+
+    function resetPaper() {
+      /*
+        نخفي الآية القديمة أولًا.
+      */
+      revealed = false;
+      dragging = false;
+
+      paper.classList.remove("revealed");
+      arrowHint.classList.remove("hidden");
+
+      paper.style.transition =
+        "transform 0.55s cubic-bezier(0.34, 1.56, 0.64, 1)";
+
+      setPaperPosition(0);
+
+      /*
+        نجهز آية جديدة، لكنها لن تظهر
+        إلا بعد سحب الورقة.
+      */
+      prepareNextVerse();
+    }
+
+    function createConfetti() {
+      const colors = [
+        "#c9a84c",
+        "#f0d080",
+        "#ef4444",
+        "#22c55e",
+        "#60a5fa",
+        "#f472b6",
+        "#ffffff"
+      ];
+
+      for (let i = 0; i < 45; i++) {
+        const piece = document.createElement("span");
+
+        piece.className = "confetti";
+
+        /*
+          يبدأ الكونفيتي من أعلى الشاشة.
+        */
+        piece.style.left =
+          `${10 + Math.random() * 80}%`;
+
+        piece.style.top = "-15px";
+
+        piece.style.width =
+          `${6 + Math.random() * 8}px`;
+
+        piece.style.height =
+          `${6 + Math.random() * 8}px`;
+
+        piece.style.background =
+          colors[Math.floor(Math.random() * colors.length)];
+
+        piece.style.animationDelay =
+          `${Math.random() * 0.65}s`;
+
+        document.body.appendChild(piece);
+
+        setTimeout(() => {
+          piece.remove();
+        }, 2800);
+      }
+    }
+
+    paper.addEventListener("pointerdown", startDrag);
+    paper.addEventListener("pointermove", moveDrag);
+    paper.addEventListener("pointerup", endDrag);
+    paper.addEventListener("pointercancel", endDrag);
+    paper.addEventListener("lostpointercapture", endDrag);
+
+    paper.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        revealPaper();
+      }
+    });
+
+    newVerseBtn.addEventListener("click", resetPaper);
+
+    /*
+      بداية أول دورة.
+    */
+    createNewCycle();
+    prepareNextVerse();
+
+    /*
+      النجوم في الخلفية.
+    */
+    const canvas = document.getElementById("stars");
+    const context = canvas.getContext("2d");
+    const stars = [];
+
+    function resizeCanvas() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = window.innerWidth * ratio;
+      canvas.height = window.innerHeight * ratio;
+
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+    }
+
+    function createStars() {
+      stars.length = 0;
+
+      for (let i = 0; i < 130; i++) {
+        stars.push({
+          x: Math.random(),
+          y: Math.random(),
+          radius: Math.random() * 1.4 + 0.3,
+          opacity: Math.random(),
+          speed: Math.random() * 0.007 + 0.003,
+          direction: Math.random() > 0.5 ? 1 : -1
+        });
+      }
+    }
+
+    function drawStars() {
+      context.clearRect(
+        0,
+        0,
+        window.innerWidth,
+        window.innerHeight
+      );
+
+      stars.forEach((star) => {
+        star.opacity +=
+          star.speed * star.direction;
+
+        if (star.opacity > 1 || star.opacity < 0) {
+          star.direction *= -1;
+        }
+
+        context.beginPath();
+
+        context.arc(
+          star.x * window.innerWidth,
+          star.y * window.innerHeight,
+          star.radius,
+          0,
+          Math.PI * 2
+        );
+
+        context.fillStyle =
+          `rgba(220, 175, 90, ${star.opacity * 0.7})`;
+
+        context.fill();
+      });
+
+      requestAnimationFrame(drawStars);
+    }
+
+    resizeCanvas();
+    createStars();
+    drawStars();
+
+    window.addEventListener("resize", resizeCanvas);
+  </script>
+
+</body>
+</html>
